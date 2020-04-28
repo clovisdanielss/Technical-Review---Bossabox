@@ -3,12 +3,14 @@ var app = express()
 var router = require('./controller/router')
 var bodyParser = require('body-parser')
 var dotenv = require('dotenv')
+var cors = require('cors')
 app.mongoose = require('mongoose')
 app.jwt = require('express-jwt')
 app.PORT = process.env.PORT || 3000
 dotenv.config()
 
 // Defining middleware.
+app.use(cors())// Coloquei para permitir acesso de outra origem.
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
