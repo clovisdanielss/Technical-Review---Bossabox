@@ -1,10 +1,10 @@
 var express = require('express')
 var app = express()
 var router = require('./controller/router')
-var config = require('./config.js')
+var config = require('./.config.js')
 var bodyParser = require('body-parser')
 app.mongoose = require('mongoose')
-
+app.jwt = require('express-jwt')
 app.PORT = process.env.PORT || 3000
 
 // Defining middleware.

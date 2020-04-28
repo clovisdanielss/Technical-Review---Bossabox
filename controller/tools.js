@@ -2,25 +2,23 @@ var express = require('express')
 var router = express.Router()
 var Tool = require('../models/tool.js')
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   if (req.query === undefined) {
     req.query = {}
   }
   Tool.find(req.query, (err, arr) => {
     if (err) {
-      res.status(500)
-      res.json({ Error: 'Erro na operação de retornar todos elementos.' })
+      return next(err)
     }
     res.json(arr)
   })
 })
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   var tool = Tool(req.body)
   tool.save((err, newTool) => {
     if (err) {
-      res.status(500)
-      res.json({ Error: 'Erro ocorreu na hora de inserir elemento na base de dados.' })
+      return next(err)
     } else {
       res.status(201)
       res.json(newTool)
@@ -28,11 +26,10 @@ router.post('/', (req, res) => {
   })
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
   Tool.deleteOne({ id: req.params.id }, (err) => {
     if (err) {
-      res.status(500)
-      res.json({ Error: 'Houve erro na remoção do elemento', id: req.params.id })
+      return next(err)
     } else {
       res.status(204)
       res.json({ Sucess: 'Elemento removido com sucesso', id: req.params.id })
