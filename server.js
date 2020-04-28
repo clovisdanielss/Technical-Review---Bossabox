@@ -1,11 +1,12 @@
 var express = require('express')
 var app = express()
 var router = require('./controller/router')
-var config = require('./.config.js')
 var bodyParser = require('body-parser')
+var dotenv = require('dotenv')
 app.mongoose = require('mongoose')
 app.jwt = require('express-jwt')
 app.PORT = process.env.PORT || 3000
+dotenv.config()
 
 // Defining middleware.
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -15,7 +16,7 @@ app.use(bodyParser.json())
 router(app)
 
 // Starting a connection with the db server. When started, the API server will start.
-app.mongoose.connect(config.url, { useNewUrlParser: true, useUnifiedTopology: true })
+app.mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true })
 var db = app.mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', () => {

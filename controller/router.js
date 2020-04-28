@@ -4,7 +4,7 @@ var errors = require('./errors.js')
 
 const router = (app) => {
   app.use(app.jwt({
-    secret: 'secret',
+    secret: process.env.SECRET,
     getToken: (req) => {
       if (req.headers && req.headers.authorization) {
         return req.headers.authorization
