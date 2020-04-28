@@ -5,7 +5,7 @@ var router = express.Router()
 router.post('/', (req, res, next) => {
   if (req.body.username === process.env.NAME &&
    req.body.password === process.env.PASS) {
-    var token = jwt.sign({ foo: 'bar', exp: Math.floor(Date.now() / 1000) + 120 },
+    var token = jwt.sign({ foo: 'bar', exp: Math.floor(Date.now() / 1000) + 60 * 60 },
       process.env.SECRET)
     res.json({ token: token })
   } else {

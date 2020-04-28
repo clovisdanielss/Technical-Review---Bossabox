@@ -27,12 +27,12 @@ router.post('/', (req, res, next) => {
 })
 
 router.delete('/:id', (req, res, next) => {
-  Tool.deleteOne({ id: req.params.id }, (err) => {
+  console.log(req.params)
+  Tool.deleteOne({ _id: req.params.id }, (err) => {
     if (err) {
       return next(err)
     } else {
-      res.status(204)
-      res.json({ Sucess: 'Elemento removido com sucesso', id: req.params.id })
+      res.status(204).end()
     }
   })
 })

@@ -1,8 +1,7 @@
 var mongoose = require('mongoose')
 
 var toolSchema = new mongoose.Schema({
-  id: 'number',
-  title: String,
+  title: { type: String, unique: true, required: true },
   link: String,
   description: String,
   tags: 'array'
