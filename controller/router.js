@@ -1,10 +1,18 @@
-var tools = require('./tools.js')
-var token = require('./token.js')
-var errors = require('./errors.js')
+const tools = require('./tools.js')
+const token = require('./token.js')
+const errors = require('./errors.js')
+const user = require('./user.js')
+const passport = require('passport')
+const User = require('../models/user.js')
 
 const router = (app) => {
+  app.use(passport.initialize())
+  passport.use(User.localStrategy)
+
   app.use(app.jwt({
-    secret: process.env.SECRET,
+    secret: (req, payload, done) => {
+      done(null, process.env.SECRET)
+    },
     getToken: (req) => {
       if (req.headers && req.headers.authorization) {
         return req.headers.authorization
@@ -12,7 +20,8 @@ const router = (app) => {
         return null
       }
     }
-  }).unless({ path: ['/token/'] }))
+  }).unless({ path: ['/token/', '/user/'] }))
+  app.use('/user', user)
   app.use('/token', token)
   app.use('/tools', tools)
   app.use(errors.logError)

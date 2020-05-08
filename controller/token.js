@@ -1,19 +1,24 @@
-var jwt = require('jsonwebtoken')
-var express = require('express')
-var router = express.Router()
+const jwt = require('jsonwebtoken')
+const express = require('express')
+const router = express.Router()
+const passport = require('passport')
 
 router.post('/', (req, res, next) => {
-  if (req.body.username === process.env.NAME &&
-   req.body.password === process.env.PASS) {
-    var token = jwt.sign({ foo: 'bar', exp: Math.floor(Date.now() / 1000) + 60 * 60 },
-      process.env.SECRET)
-    res.json({ token: token })
-  } else {
-    var err = new Error()
-    err.name = 'InvalidUsernameOrPassword'
-    err.status = 401
-    return next(err)
-  }
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      err.name = 'InvalidUsernameOrPassword'
+      err.status = 401
+      return next(err)
+    } else if (user) {
+      var token = jwt.sign(
+        {
+          username: user,
+          exp: Math.floor(Date.now() / 1000) + 60 * 60
+        },
+        process.env.SECRET)
+      return res.json({ token: token })
+    }
+  })(req, res, next)
 })
 
 module.exports = router
